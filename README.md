@@ -1,12 +1,22 @@
-# React + Vite
+# SIGAIRE — Portal de clima y calidad del aire (React + Vite)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Sitio de demostración (Vercel): < (https://clima-react-iota.vercel.app/) >
 
-Currently, two official plugins are available:
+## Qué incluye
+- Frontend en **React + Vite**.
+- Componentes de tarjetas y gráficas (ECharts/Leaflet).
+- PWA básica y endpoints locales en `/api` para notificaciones push (pruebas).
+- Archivo **`.env.example`** con todas las variables necesarias (sin secretos).
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Consumo real de APIs (para revisión)
+- **Open-Meteo (clima / pronóstico):**  
+  Código principal en `src/hooks/useWeather.js` (búsqueda: `open-meteo.com/v1/forecast`).
+  Usado por componentes como `TemperatureLine.jsx`, `WindDial.jsx`, `UvGauge.jsx`, etc.
 
-## Expanding the ESLint configuration
+- **Calidad del aire (CAMS vía endpoint de Open-Meteo Air Quality):**  
+  Implementado en `src/components/PollutantsCard.jsx` y `src/pages/PollutantsDetail.jsx`  
+  (búsqueda: `open-meteo.com/v1/air-quality`).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+> Cómo verificar rápido en GitHub: presiona **t** y busca `open-meteo` o `air-quality` para saltar a las llamadas `fetch`.
+
+## Estructura mínima
