@@ -1,0 +1,146 @@
+/* src/components/PillNav.css — versión unificada y responsive */
+
+/* ===== Contenedor general (debajo del logo) ===== */
+.pill-nav-container{
+  position: relative;
+  margin: 8px auto 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  z-index: 2;
+  /* respeta los “safe areas” de iOS */
+  padding-inline: max(12px, env(safe-area-inset-left)) max(12px, env(safe-area-inset-right));
+}
+
+/* ===== Barra valores base, se sobreescriben por props si las pasas  */
+.pill-nav{
+  --base:#0b2239;    /* color del contorno/“barra” */
+  --pill-bg:#ffffff; /* color de cada pastilla */
+  --hover-text:#ffffff;
+  --pill-text:#0b2239;
+
+  --nav-h: 44px;
+  --pill-gap: 12px;
+  --pill-pad-x: 22px;
+
+  width: 100%;
+  max-width: 1100px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* ⬅ centrado en desktop */
+  gap: 12px;
+}
+
+/* Logo circular (se oculta en móvil para ganar espacio) */
+.pill-logo{
+  width: var(--nav-h);
+  height: var(--nav-h);
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,.15), inset 0 0 0 1px rgba(255,255,255,.25);
+}
+.pill-logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+/* Carril de pastillas */
+.pill-nav-items{ position: relative; display: flex; }
+.pill-list{
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: var(--pill-gap);
+  margin: 0 auto;                /* ⬅ el carril se centra solito */
+  padding: 6px;
+  height: var(--nav-h);
+  border-radius: 9999px;
+  background: var(--base);
+  box-shadow: 0 10px 30px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.25);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* Pastilla */
+.pill{
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: calc(var(--nav-h) - 12px);
+  padding: 0 var(--pill-pad-x);
+  min-width: 132px;
+  border-radius: 9999px;
+  background: var(--pill-bg);
+  color: var(--pill-text);
+  font-weight: 800;
+  font-size: 18px;
+  letter-spacing: .02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,.06);
+  isolation: isolate; /* el círculo animado queda detrás del texto */
+}
+.pill::after{ content: none !important; }
+
+/* Cross-fade de texto (normal ↔ hover/activo) */
+.label-stack{ position:relative; z-index:2; display:grid; place-items:center; line-height:1; }
+.pill-label{ transition: opacity .22s ease; }
+.pill-label-hover{
+  position:absolute; inset:0; display:grid; place-items:center;
+  color:var(--hover-text); opacity:0; transition: opacity .22s ease;
+}
+.pill:hover .pill-label-hover, .pill.is-active .pill-label-hover{ opacity:1; }
+.pill:hover .pill-label,       .pill.is-active .pill-label      { opacity:0; }
+
+/* Círculo de relleno (si lo animas desde JS/GSAP) */
+.hover-circle{
+  position:absolute; left:50%; bottom:0;
+  border-radius:50%;
+  background: var(--base);
+  transform: translateX(-50%) scale(0);
+  transform-origin: 50% 100%;
+  will-change: transform;
+  z-index:1; pointer-events:none;
+}
+
+/* ====== Mobile (≤768px): 2 filas centradas, sin overlay ni scroll raro ====== */
+@media (max-width: 768px){
+  .pill-logo{ display: none; } /* más espacio para las pastillas */
+
+  .pill-list{
+    background: transparent;   /* quitamos la “cápsula” azul */
+    box-shadow: none;
+    height: auto;
+    padding: 0;
+    gap: 10px 12px;
+    flex-wrap: wrap;           /* ⬅ pasa a 1–2 filas centradas */
+    justify-content: center;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .pill{
+    min-width: auto;
+    height: 40px;
+    padding: 0 16px;
+    font-size: 16px;
+    background: #fff;
+    border: 2px solid rgba(11,34,57,.20);
+    box-shadow: 0 6px 16px rgba(0,0,0,.12);
+  }
+  .pill.is-active, .pill:hover{
+    background:#0b2239;
+    color:#fff;
+    border-color:#0b2239;
+  }
+}
+
+/* Teléfonos muy angostos */
+@media (max-width: 360px){
+  .pill{ padding: 0 14px; font-size: 15px; }
+}
+
+/* Asegura que no aparezca ningún overlay antiguo */
+.pillnav__toggle,
+#pillnav-overlay,
+.pillnav-overlay,
+.pillnav-backdrop{ display: none !important; }

@@ -1,0 +1,67 @@
+/* Esto ya lo que está funcionando, funciona */
+.electric-border{
+    position: relative;
+    isolation: isolate;
+    border-radius: 18px; /* iguala tus cards */
+  }
+  
+  .electric-border::before{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    border-radius:inherit;
+    padding:2px;
+  
+    /* Colores (puedes cambiar) */
+    --c1: rgba(125,211,252,.95); /* sky-300 */
+    --c2: rgba(56,189,248,.95);  /* sky-400 */
+  
+    background:
+      conic-gradient(from var(--_ang,0deg),
+        transparent 0 10%, var(--c1) 12%,
+        var(--c2) 18%, transparent 26% 100%);
+  
+    /* Máscara: estándar + WebKit (para Safari) */
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+  
+    /* Composición de la máscara */
+    mask-composite: exclude;            /* Firefox/estándar */
+    -webkit-mask-composite: xor;        /* Safari */
+  
+    /* Brillos y animación */
+    filter:
+      drop-shadow(0 0 14px rgba(56,189,248,.55))
+      drop-shadow(0 0 28px rgba(56,189,248,.30));
+    animation: eb-spin 4.5s linear infinite;
+  
+    pointer-events:none;
+    z-index:0;
+  }
+  
+  .electric-border::after{
+    content:"";
+    position:absolute; inset:0; border-radius:inherit;
+    box-shadow:
+      inset 0 0 24px rgba(125,211,252,.15),
+      inset 0 0 48px rgba(56,189,248,.10);
+    pointer-events:none; z-index:0;
+  }
+  
+  .electric-border:hover::before{
+    filter:
+      drop-shadow(0 0 16px rgba(56,189,248,.70))
+      drop-shadow(0 0 36px rgba(56,189,248,.40));
+  }
+  
+  @keyframes eb-spin{ to{ --_ang:360deg; } }
+  
+  /* Si alguna card tenía borde decorativo propio, lo neutralizas aquí */
+  .electric-border.temperature-card,
+  .electric-border.uv-card,
+  .electric-border.aqi-card,
+  .electric-border.pressure-card{ border-left:0 !important; }
